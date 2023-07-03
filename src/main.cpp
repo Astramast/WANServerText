@@ -9,14 +9,13 @@
 std::vector<int> client_sockets;
 
 void handleClient(int client_socket) {
-	char buffer[1024] = {0};
 	const char* response = "[Message received by server]";
 
 	while (true) {
-		int valread = read(client_socket, buffer, 1024);
-		if (valread <= 0) {
-			break;
-		}
+		size_t msg_size;
+		read(client_socket, &msg_size, sizeof(size_t));
+		char* buffer;
+		read(client_socket, buffer, msg_size);
 
 		// Broadcast message to all connected clients
 		std::cout << buffer << std::endl;
